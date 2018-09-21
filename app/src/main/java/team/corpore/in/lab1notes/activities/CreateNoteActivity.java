@@ -60,7 +60,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         thirdClassRB = findViewById(R.id.third_class_rb);
 
         setupToolbar();
-        getData();
+        getData(savedInstanceState);
         setupUI();
         initTitleAndText();
         initClassRadioButtons();
@@ -125,7 +125,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         }
     }
 
-    private void getData() {
+    private void getData(Bundle savedInstance) {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             note = (Note) extras.getSerializable(Constants.KEY_NOTE);
@@ -133,6 +133,9 @@ public class CreateNoteActivity extends AppCompatActivity {
                 Toast.makeText(CreateNoteActivity.this, getString(R.string.error), Toast.LENGTH_SHORT).show();
                 finish();
             }
+        }
+        if (savedInstance != null) {
+            note = (Note) savedInstance.getSerializable(Constants.KEY_NOTE);
         }
     }
 
@@ -229,6 +232,18 @@ public class CreateNoteActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putSerializable(Constants.KEY_NOTE, note);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     class SelectClassImportance implements CompoundButton.OnCheckedChangeListener {
